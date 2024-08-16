@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.0",
     "@nestjs/mapped-types": "^2.0.5",
     "@nestjs/mongoose": "^10.0.10",
@@ -69,7 +70,11 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/db(|/.*)$": "<rootDir>/libs/db/src/$1"
+    }
   }
 }
