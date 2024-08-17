@@ -37,14 +37,17 @@ export class UsersService {
     return this.userModel.find().select('-password').exec();
   }
 
-  async findOne(email: string): Promise<Partial<User>> {
-    const user = await this.userModel
-      .findOne({ email })
-      .select('-password')
-      .exec();
+  async validate(email: string, password: string): Promise<Partial<User>> {
+    const user = await this.userModel.findOne({ email }).exec();
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);
     }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException('Password is incorrect');
+    }
+
     return this.userSanitizer(user);
   }
 
@@ -104,7 +107,7 @@ export class UsersService {
   }
 
   private userSanitizer(user: UserDocument): Partial<User> {
-    const { password, role, isPremium, ...sanitizedUser } = user.toObject();
+    const { password, ...sanitizedUser } = user.toObject();
     return sanitizedUser;
   }
 }

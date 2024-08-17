@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { BookServiceModule } from './book-service.module';
+import { AuthServiceModule } from './auth-service.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(BookServiceModule);
+  const app = await NestFactory.create(AuthServiceModule);
 
   app.useGlobalPipes(
     new ValidationPipe({

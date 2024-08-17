@@ -12,10 +12,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@app/db';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { Public } from '@app/jwt';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<Partial<User>> {
     return this.usersService.create(createUserDto);
@@ -26,9 +29,13 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':email')
-  async findOne(@Param('email') email: string): Promise<Partial<User>> {
-    return this.usersService.findOne(email);
+  @Public()
+  @Post('validate')
+  async validate(
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ): Promise<Partial<User>> {
+    return this.usersService.validate(email, password);
   }
 
   @Patch(':email')
