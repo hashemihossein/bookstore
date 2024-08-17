@@ -73,9 +73,6 @@ export class UsersService {
       await existingUser.save();
       return this.userSanitizer(existingUser);
     } catch (error) {
-      if (error.code === 11000) {
-        throw new ConflictException('Email already exists');
-      }
       throw error;
     }
   }
@@ -103,6 +100,22 @@ export class UsersService {
     try {
       await existingUser.save();
       return this.userSanitizer(existingUser);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async makeAdmin(userId: string) {
+    const user = await this.userModel.findById(userId).exec();
+    if (!user) {
+      throw new NotFoundException(`User not found`);
+    }
+
+    user.role = 'admin';
+
+    try {
+      await user.save();
+      return this.userSanitizer(user);
     } catch (error) {
       throw error;
     }

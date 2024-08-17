@@ -29,6 +29,12 @@
       ],
       "@app/jwt/*": [
         "libs/jwt/src/*"
+      ],
+      "@app/rbac": [
+        "libs/rbac/src"
+      ],
+      "@app/rbac/*": [
+        "libs/rbac/src/*"
       ]
     }
   }

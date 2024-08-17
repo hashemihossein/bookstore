@@ -82,7 +82,8 @@
     ],
     "moduleNameMapper": {
       "^@app/db(|/.*)$": "<rootDir>/libs/db/src/$1",
-      "^@app/jwt(|/.*)$": "<rootDir>/libs/jwt/src/$1"
+      "^@app/jwt(|/.*)$": "<rootDir>/libs/jwt/src/$1",
+      "^@app/rbac(|/.*)$": "<rootDir>/libs/rbac/src/$1"
     }
   }
 }

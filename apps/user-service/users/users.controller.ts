@@ -15,6 +15,7 @@ import { User } from '@app/db';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { Public } from '@app/jwt';
 import { UserDecorator } from '@app/jwt/decorator/user.decorator';
+import { Admin } from '@app/rbac/admin.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -26,6 +27,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @Admin()
   @Get()
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
@@ -54,5 +56,11 @@ export class UsersController {
     @UserDecorator() user: any,
   ): Promise<Partial<User>> {
     return this.usersService.updatePassword(updatePasswordDto, user);
+  }
+
+  @Admin()
+  @Post('makeAdmin')
+  async makeAdmin(@Body('userId') userId: string) {
+    return this.usersService.makeAdmin(userId);
   }
 }

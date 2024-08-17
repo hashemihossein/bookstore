@@ -33,6 +33,7 @@ export class AuthService {
         username: response.data.username,
         email: response.data.email,
         isPremium: response.data.isPremium,
+        role: response.data.role,
       });
 
       return { ...response.data, access_token: 'Bearer ' + accessToken };
@@ -55,6 +56,7 @@ export class AuthService {
         username: response.data.username,
         email: response.data.email,
         isPremium: response.data.isPremium,
+        role: response.data.role,
       });
       return { ...response.data, access_token: 'Bearer ' + accessToken };
     } catch (error) {
