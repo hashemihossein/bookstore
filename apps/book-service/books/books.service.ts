@@ -20,15 +20,19 @@ export class BooksService {
     return `This action returns all books`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  async findOne(id: string): Promise<Book> {
+    return this.bookModel.findById(id).exec();
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+  async update(id: string, updateBookDto: UpdateBookDto): Promise<Book> {
+    return this.bookModel
+      .findByIdAndUpdate(id, updateBookDto, {
+        new: true,
+      })
+      .exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  async remove(id: string): Promise<Book> {
+    return this.bookModel.findByIdAndDelete(id).exec();
   }
 }
