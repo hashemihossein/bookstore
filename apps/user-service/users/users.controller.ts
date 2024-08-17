@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,6 +14,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@app/db';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { Public } from '@app/jwt';
+import { UserDecorator } from '@app/jwt/decorator/user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -38,19 +40,19 @@ export class UsersController {
     return this.usersService.validate(email, password);
   }
 
-  @Patch(':email')
+  @Patch()
   async update(
-    @Param('email') email: string,
     @Body() updateUserDto: UpdateUserDto,
+    @UserDecorator() user: any,
   ): Promise<Partial<User>> {
-    return this.usersService.update(email, updateUserDto);
+    return this.usersService.update(updateUserDto, user);
   }
 
-  @Patch(':email/password')
+  @Patch('updatePassword')
   async updatePassword(
-    @Param('email') email: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
+    @UserDecorator() user: any,
   ): Promise<Partial<User>> {
-    return this.usersService.updatePassword(email, updatePasswordDto);
+    return this.usersService.updatePassword(updatePasswordDto, user);
   }
 }

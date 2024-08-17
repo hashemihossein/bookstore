@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Req,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -11,6 +12,7 @@ import { User, UserDocument } from '@app/db';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { Request, request } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -52,12 +54,12 @@ export class UsersService {
   }
 
   async update(
-    email: string,
     updateUserDto: UpdateUserDto,
+    user: any,
   ): Promise<Partial<User>> {
-    const existingUser = await this.userModel.findOne({ email }).exec();
+    const existingUser = await this.userModel.findById(user._id).exec();
     if (!existingUser) {
-      throw new NotFoundException(`User with email ${email} not found`);
+      throw new NotFoundException(`User not found`);
     }
 
     if (updateUserDto.username) {
@@ -79,12 +81,12 @@ export class UsersService {
   }
 
   async updatePassword(
-    email: string,
     updatePasswordDto: UpdatePasswordDto,
+    user: any,
   ): Promise<Partial<User>> {
-    const existingUser = await this.userModel.findOne({ email }).exec();
+    const existingUser = await this.userModel.findById(user._id).exec();
     if (!existingUser) {
-      throw new NotFoundException(`User with email ${email} not found`);
+      throw new NotFoundException(`User not found`);
     }
 
     const isMatch = await bcrypt.compare(
