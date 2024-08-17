@@ -23,6 +23,12 @@
       ],
       "@app/db/*": [
         "libs/db/src/*"
+      ],
+      "@app/jwt": [
+        "libs/jwt/src"
+      ],
+      "@app/jwt/*": [
+        "libs/jwt/src/*"
       ]
     }
   }
