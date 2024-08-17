@@ -10,6 +10,9 @@ export class Book extends Document {
   author: string;
 
   @Prop()
+  description: string;
+
+  @Prop()
   genre: string;
 
   @Prop()
