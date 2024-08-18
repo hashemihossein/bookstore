@@ -37,8 +37,11 @@ export class BooksController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Book> {
-    return this.booksService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @UserDecorator() user: any,
+  ): Promise<Book> {
+    return this.booksService.findOne(id, user);
   }
 
   @Admin()

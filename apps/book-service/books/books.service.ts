@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -25,26 +25,6 @@ export class BooksService {
     user: any,
   ) {
     const { title, author, genre, q } = query;
-
-    const cacheKey = {
-      title,
-      author,
-      genre,
-      q,
-      query,
-      page,
-      isPremium: true,
-    };
-
-    if (user.role !== 'admin' && user.isPremium !== true) {
-      cacheKey.isPremium = false;
-    }
-
-    const cachedBooks = await this.cacheService.get(JSON.stringify(cacheKey));
-
-    if (cachedBooks) {
-      return cachedBooks;
-    }
 
     const filter: any = {};
 
@@ -90,13 +70,29 @@ export class BooksService {
       .limit(queryOptions.limit)
       .exec();
 
-    await this.cacheService.set(JSON.stringify(cacheKey), books, 3600);
-
     return books;
   }
 
-  async findOne(id: string): Promise<Book> {
-    return this.bookModel.findById(id).exec();
+  async findOne(id: string, user: any): Promise<Book> {
+    const cacheKey = { id };
+
+    const cachedBook = await this.cacheService.get(JSON.stringify(cacheKey));
+
+    if (cachedBook) {
+      if (cachedBook.isPremium === true && user.isPremium === false) {
+        throw new ForbiddenException("You don't have Premium access");
+      }
+      return cachedBook;
+    }
+
+    const book = await this.bookModel.findById(id).exec();
+
+    await this.cacheService.set(JSON.stringify(cacheKey), book, 3600);
+
+    if (book.isPremium === true && user.isPremium === false) {
+      throw new ForbiddenException("You don't have Premium access");
+    }
+    return book;
   }
 
   async update(id: string, updateBookDto: UpdateBookDto): Promise<Book> {
