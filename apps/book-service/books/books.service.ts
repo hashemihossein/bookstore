@@ -96,14 +96,19 @@ export class BooksService {
   }
 
   async update(id: string, updateBookDto: UpdateBookDto): Promise<Book> {
-    return this.bookModel
+    const book = await this.bookModel
       .findByIdAndUpdate(id, updateBookDto, {
         new: true,
       })
       .exec();
+
+    await this.cacheService.set(JSON.stringify(id), book, 3600);
+    return book;
   }
 
   async remove(id: string): Promise<Book> {
-    return this.bookModel.findByIdAndDelete(id).exec();
+    let book = await this.bookModel.findByIdAndDelete(id).exec();
+    await this.cacheService.delete(id);
+    return book;
   }
 }

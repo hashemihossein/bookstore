@@ -32,4 +32,16 @@ export class CacheService {
       });
     });
   }
+
+  async delete(key: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.memcachedClient.del(key, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
 }
