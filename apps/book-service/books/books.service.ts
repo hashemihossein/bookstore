@@ -4,11 +4,13 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Book } from '@app/db';
 import { Model } from 'mongoose';
+import { CacheService } from '@app/cache';
 
 @Injectable()
 export class BooksService {
   constructor(
     @InjectModel(Book.name) private readonly bookModel: Model<Book>,
+    private readonly cacheService: CacheService,
   ) {}
 
   async create(createBookDto: CreateBookDto): Promise<Book> {
@@ -24,12 +26,31 @@ export class BooksService {
   ) {
     const { title, author, genre, q } = query;
 
+    const cacheKey = {
+      title,
+      author,
+      genre,
+      q,
+      query,
+      page,
+      isPremium: true,
+    };
+
+    if (user.role !== 'admin' && user.isPremium !== true) {
+      cacheKey.isPremium = false;
+    }
+
+    const cachedBooks = await this.cacheService.get(JSON.stringify(cacheKey));
+
+    if (cachedBooks) {
+      return cachedBooks;
+    }
+
     const filter: any = {};
 
     if (user.role !== 'admin' && user.isPremium !== true) {
       filter.isPremium = false;
     }
-
     const matchConditions: any[] = [];
 
     if (title) {
@@ -68,6 +89,8 @@ export class BooksService {
       .skip((queryOptions.page - 1) * queryOptions.limit)
       .limit(queryOptions.limit)
       .exec();
+
+    await this.cacheService.set(JSON.stringify(cacheKey), books, 3600);
 
     return books;
   }
