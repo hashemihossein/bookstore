@@ -90,6 +90,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/cart-service/tsconfig.app.json"
       }
+    },
+    "rabbit-mq": {
+      "type": "library",
+      "root": "libs/rabbit-mq",
+      "entryFile": "index",
+      "sourceRoot": "libs/rabbit-mq/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/rabbit-mq/tsconfig.lib.json"
+      }
     }
   }
 }

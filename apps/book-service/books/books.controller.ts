@@ -7,6 +7,8 @@ import {
   Delete,
   Put,
   Query,
+  OnModuleInit,
+  Inject,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -15,6 +17,8 @@ import { Book } from '@app/db';
 import { Admin } from '@app/rbac/admin.decorator';
 import { SearchBooksDto } from './dto/search-books.dto';
 import { UserDecorator } from '@app/jwt/decorator/user.decorator';
+import { ClientProxy, MessagePattern } from '@nestjs/microservices';
+import { Public } from '@app/jwt';
 
 @Controller('books')
 export class BooksController {
@@ -57,5 +61,11 @@ export class BooksController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<Book> {
     return this.booksService.remove(id);
+  }
+
+  @Public()
+  @MessagePattern({ cmd: 'localGetBook' })
+  async localGetBook(id: string): Promise<Book> {
+    return this.booksService.localGetBook(id);
   }
 }

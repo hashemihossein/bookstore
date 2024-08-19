@@ -1,34 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { UserDecorator } from '@app/jwt/decorator/user.decorator';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartDto } from './dto/create-cart.dto';
-import { UpdateCartDto } from './dto/update-cart.dto';
+import { AddToCartDto } from './dto/add-to-cart.dto';
+import { Cart } from '@app/db/schemas/cart.schema';
 
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Post()
-  create(@Body() createCartDto: CreateCartDto) {
-    return this.cartService.create(createCartDto);
-  }
-
   @Get()
-  findAll() {
-    return this.cartService.findAll();
+  async getCart(@UserDecorator() user: any) {
+    return this.cartService.getCart(user);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cartService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
-    return this.cartService.update(+id, updateCartDto);
+  @Post()
+  async addToCart(
+    @UserDecorator() user: any,
+    @Body() addToCartDto: AddToCartDto,
+  ): Promise<Cart> {
+    return this.cartService.addToCart(user, addToCartDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cartService.remove(+id);
+  async removeFromCart(
+    @UserDecorator() user: any,
+    @Param('id') id: string,
+  ): Promise<Cart> {
+    return this.cartService.removeFromCart(user, id);
+  }
+
+  @Delete()
+  async deleteCart(@UserDecorator() user: any): Promise<void> {
+    return this.cartService.deleteCart(user);
+  }
+
+  @Post('payment')
+  async payment(@UserDecorator() user: any): Promise<any> {
+    return this.cartService.payment(user);
   }
 }

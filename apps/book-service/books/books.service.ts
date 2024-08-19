@@ -111,4 +111,20 @@ export class BooksService {
     await this.cacheService.delete(id);
     return book;
   }
+
+  async localGetBook(id: string): Promise<Book> {
+    const cacheKey = { id };
+
+    const cachedBook = await this.cacheService.get(JSON.stringify(cacheKey));
+
+    if (cachedBook) {
+      return cachedBook;
+    }
+
+    const book = await this.bookModel.findById(id).exec();
+
+    await this.cacheService.set(JSON.stringify(cacheKey), book, 3600);
+
+    return book;
+  }
 }
