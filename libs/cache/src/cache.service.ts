@@ -44,4 +44,16 @@ export class CacheService {
       });
     });
   }
+
+  async deleteAll(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.memcachedClient.flush((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
 }

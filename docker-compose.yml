@@ -1,0 +1,16 @@
+version: '1'
+services:
+  auth-service:
+    container_name: auth-service
+    build:
+      context: .
+      args:
+        - APP=auth-service
+    restart: always
+    ports:
+      - 2002:3000
+#Docker file
+#Docker Compose
+#traefik
+#Swagger
+#ERB

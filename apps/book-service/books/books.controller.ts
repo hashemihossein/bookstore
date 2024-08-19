@@ -30,7 +30,7 @@ export class BooksController {
     return this.booksService.create(createBookDto);
   }
 
-  @Get('search')
+  @Get('')
   async searchBooks(
     @Query() query: SearchBooksDto,
     @Query('page') page: number = 1,

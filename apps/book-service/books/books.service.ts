@@ -31,6 +31,7 @@ export class BooksService {
     if (user.role !== 'admin' && user.isPremium !== true) {
       filter.isPremium = false;
     }
+
     const matchConditions: any[] = [];
 
     if (title) {
@@ -60,7 +61,6 @@ export class BooksService {
       page,
       limit,
     };
-    console.log(filter, queryConditions);
     const books = await this.bookModel
       .find({
         ...filter,

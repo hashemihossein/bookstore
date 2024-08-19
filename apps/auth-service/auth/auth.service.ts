@@ -29,11 +29,7 @@ export class AuthService {
       );
 
       const accessToken = this.jwtService.sign({
-        _id: response.data._id,
-        username: response.data.username,
-        email: response.data.email,
-        isPremium: response.data.isPremium,
-        role: response.data.role,
+        id: response.data._id,
       });
 
       return { ...response.data, access_token: 'Bearer ' + accessToken };
@@ -52,11 +48,7 @@ export class AuthService {
       );
 
       const accessToken = this.jwtService.sign({
-        _id: response.data._id,
-        username: response.data.username,
-        email: response.data.email,
-        isPremium: response.data.isPremium,
-        role: response.data.role,
+        id: response.data._id,
       });
       return { ...response.data, access_token: 'Bearer ' + accessToken };
     } catch (error) {

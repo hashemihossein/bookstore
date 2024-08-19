@@ -51,6 +51,7 @@ export class CartService {
     if (!book) {
       throw new NotFoundException('Book not found');
     }
+
     if (
       book.isPremium === true &&
       user.isPremium === false &&
@@ -70,13 +71,16 @@ export class CartService {
 
     let cartItem = await this.cartItemModel.findOne({
       book: new Types.ObjectId(addToCartDto.book),
-      cart: cart.id,
+      cart: new Types.ObjectId(cart.id),
     });
+
+    console.log(cart.id, addToCartDto.book);
+    console.log(cartItem, ':DD:D');
 
     if (!cartItem) {
       cartItem = new this.cartItemModel({
         book: new Types.ObjectId(addToCartDto.book),
-        cart: cart.id,
+        cart: new Types.ObjectId(cart.id),
       });
       cart.items.push(cartItem.id);
     }
@@ -129,7 +133,7 @@ export class CartService {
 
     let cartItem = await this.cartItemModel.findOne({
       book: new Types.ObjectId(id),
-      cart: cart.id,
+      cart: new Types.ObjectId(cart.id),
     });
 
     if (!cartItem) {
@@ -163,7 +167,6 @@ export class CartService {
         status: 'cart',
       });
     } catch (error) {
-      console.error('Error removing cart:', error);
       throw error;
     }
   }

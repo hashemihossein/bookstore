@@ -99,6 +99,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/rabbit-mq/tsconfig.lib.json"
       }
+    },
+    "seeder-service": {
+      "type": "application",
+      "root": "apps/seeder-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/seeder-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/seeder-service/tsconfig.app.json"
+      }
+    },
+    "seeder": {
+      "type": "application",
+      "root": "apps/seeder",
+      "entryFile": "main",
+      "sourceRoot": "apps/seeder/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/seeder/tsconfig.app.json"
+      }
     }
   }
 }
