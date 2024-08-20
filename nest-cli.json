@@ -117,6 +117,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/seeder/tsconfig.app.json"
       }
+    },
+    "document-aggregator": {
+      "type": "application",
+      "root": "apps/document-aggregator",
+      "entryFile": "main",
+      "sourceRoot": "apps/document-aggregator/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/document-aggregator/tsconfig.app.json"
+      }
     }
   }
 }
