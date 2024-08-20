@@ -74,9 +74,6 @@ export class CartService {
       cart: new Types.ObjectId(cart.id),
     });
 
-    console.log(cart.id, addToCartDto.book);
-    console.log(cartItem, ':DD:D');
-
     if (!cartItem) {
       cartItem = new this.cartItemModel({
         book: new Types.ObjectId(addToCartDto.book),

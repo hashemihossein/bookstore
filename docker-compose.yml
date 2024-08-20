@@ -1,5 +1,21 @@
-version: '1'
+version: '3.7'
 services:
+  traefik:
+    container_name: traefik
+    image: traefik:v2.9
+    command:
+      - '--api.insecure=true'
+      - '--providers.file.filename=/etc/traefik/dynamic.yml'
+      - '--entrypoints.web.address=:9000'
+    ports:
+      - '9000:9000'
+      - '8080:8080' # Traefik dashboard
+    volumes:
+      - './traefik.yml:/etc/traefik/traefik.yml'
+      - './dynamic.yml:/etc/traefik/dynamic.yml'
+    networks:
+      - traefik
+
   auth-service:
     container_name: auth-service
     build:
@@ -7,10 +23,92 @@ services:
       args:
         - APP=auth-service
     restart: always
+    env_file:
+      - .env
+    networks:
+      - traefik
+
+  user-service:
+    container_name: user-service
+    build:
+      context: .
+      args:
+        - APP=user-service
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - traefik
+
+  book-service:
+    container_name: book-service
+    build:
+      context: .
+      args:
+        - APP=book-service
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - traefik
+
+  cart-service:
+    container_name: cart-service
+    build:
+      context: .
+      args:
+        - APP=cart-service
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - traefik
+
+  seeder:
+    container_name: seeder
+    build:
+      context: .
+      args:
+        - APP=seeder
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - traefik
+    depends_on:
+      - mongodb
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    volumes:
+      - db:/data/db
+    restart: unless-stopped
+    networks:
+      - traefik
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
     ports:
-      - 2002:3000
-#Docker file
-#Docker Compose
-#traefik
-#Swagger
-#ERB
+      - '15672:15672'
+    restart: unless-stopped
+    networks:
+      - traefik
+
+  memcached:
+    container_name: memcached
+    image: memcached
+    restart: always
+    networks:
+      - traefik
+
+volumes:
+  db:
+  rabbitmq:
+
+networks:
+  traefik:

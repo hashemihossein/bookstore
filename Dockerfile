@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node AS base
 
 # development stage
 FROM base AS development 
@@ -13,4 +13,5 @@ RUN npm run build ${APP}
 
 # Add an env to save ARG
 ENV APP_MAIN_FILE=dist/apps/${APP}/main 
+EXPOSE 3000
 CMD node ${APP_MAIN_FILE}
