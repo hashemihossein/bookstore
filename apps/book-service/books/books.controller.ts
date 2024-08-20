@@ -19,11 +19,18 @@ import { SearchBooksDto } from './dto/search-books.dto';
 import { UserDecorator } from '@app/jwt/decorator/user.decorator';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
 import { Public } from '@app/jwt';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('books')
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Protected Admin Endpoint',
+    description: 'This endpoint is only accessible to admin users.',
+  })
   @Admin()
   @Post()
   async create(@Body() createBookDto: CreateBookDto): Promise<Book> {
@@ -48,6 +55,11 @@ export class BooksController {
     return this.booksService.findOne(id, user);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Protected Admin Endpoint',
+    description: 'This endpoint is only accessible to admin users.',
+  })
   @Admin()
   @Put(':id')
   async update(
@@ -57,6 +69,11 @@ export class BooksController {
     return this.booksService.update(id, updateBookDto);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Protected Admin Endpoint',
+    description: 'This endpoint is only accessible to admin users.',
+  })
   @Admin()
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<Book> {

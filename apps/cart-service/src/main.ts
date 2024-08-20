@@ -10,9 +10,10 @@ async function bootstrap() {
     .setTitle('Bookstore Cart')
     .setDescription("cart api's")
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api-document', app, document);
 
   app.useGlobalPipes(
     new ValidationPipe({

@@ -2,9 +2,19 @@ import { NestFactory } from '@nestjs/core';
 import { BookServiceModule } from './book-service.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(BookServiceModule);
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Bookstore Auth')
+    .setDescription("auth api's")
+    .setVersion('1.0.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api-document', app, document);
 
   app.useGlobalPipes(
     new ValidationPipe({

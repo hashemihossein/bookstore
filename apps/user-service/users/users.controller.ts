@@ -16,7 +16,9 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { Public } from '@app/jwt';
 import { UserDecorator } from '@app/jwt/decorator/user.decorator';
 import { Admin } from '@app/rbac/admin.decorator';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('books')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -27,6 +29,11 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Protected Admin Endpoint',
+    description: 'This endpoint is only accessible to admin users.',
+  })
   @Admin()
   @Get()
   async findAll(): Promise<User[]> {
@@ -58,6 +65,11 @@ export class UsersController {
     return this.usersService.updatePassword(updatePasswordDto, user);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Protected Admin Endpoint',
+    description: 'This endpoint is only accessible to admin users.',
+  })
   @Admin()
   @Post('makeAdmin')
   async makeAdmin(@Body('userId') userId: string) {
