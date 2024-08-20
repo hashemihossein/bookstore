@@ -1,6 +1,6 @@
 # Bookstore
 
-This project is a fully containerized bookstore application developed with a microservices architecture. It utilizes modern technologies like JWT for authentication, MongoDB as the database, RabbitMQ and HTTP for inter-service communication, and Memcached for caching. The system is orchestrated using Docker, with Traefik handling routing and load balancing. The API documentation is available via Swagger.
+This project is a fully containerized bookstore application developed with a microservices architecture. It utilizes modern technologies like JWT for authentication, MongoDB as the database, RabbitMQ and HTTP for inter-service communication, and Memcached for caching. The system is containerized using Docker, with Traefik handling routing and load balancing. The API documentation is available via Swagger.
 
 ## Features
 
@@ -12,7 +12,6 @@ This project is a fully containerized bookstore application developed with a mic
 - **Traefik**: Dynamic routing and load balancing for microservices.
 - **Docker**: Fully containerized setup for easy deployment.
 - **Swagger**: API documentation available at `/api-docs`.
-- **Database Seeder**: Easy initialization of database collections via `/seeder` endpoint.
 
 ## Architecture
 
@@ -23,9 +22,10 @@ The system is built using a microservices architecture. Each service is independ
 - **Book Service**: Handles book-related operations (CRUD).
 - **Cart Service**: Manages the user's shopping cart.
 
+A **Database Seeder** for easy initialization of database collections via `GET` method at `/seeder` endpoint.
 A **Document Aggregator** is used to merge the Swagger documentation from all services, providing a unified API documentation accessible at `/api-docs`.
 
-Traefik is used as a reverse proxy and load balancer, managing the routing of requests to the appropriate services. The system also includes caching with Memcached to improve performance.
+Traefik is used as a reverse proxy and load balancer, managing the routing of requests to the appropriate services.
 
 ## Installation
 
@@ -36,13 +36,23 @@ Traefik is used as a reverse proxy and load balancer, managing the routing of re
    cd bookstore-microservices
    ```
 
-2. **Build and start the containers**:
+2. **Copy and configure the environment variables**:
+
+   The project includes a `.env.sample` file. You must copy this file and rename it to `.env`, then modify the values as needed for your environment.
+
+   ```bash
+   cp .env.sample .env
+   ```
+
+   **Note:** The application will not run without a properly configured `.env` file.
+
+3. **Build and start the containers**:
 
    ```bash
    docker-compose up --build -d
    ```
 
-3. **Verify the services are running**:
+4. **Verify the services are running**:
 
    ```bash
    docker ps
@@ -50,18 +60,11 @@ Traefik is used as a reverse proxy and load balancer, managing the routing of re
 
 ## Configuration
 
-All configurations are managed via environment variables. You can find and modify these in the `.env` files located in each service's directory. Key configuration variables include:
-
-- `JWT_SECRET`: Secret key for signing JWT tokens.
-- `MONGO_URI`: MongoDB connection string.
-- `RABBITMQ_URL`: URL for RabbitMQ.
-- `MEMCACHED_HOST`: Host for Memcached.
-
-## Usage
+All configurations are managed via environment variables. A `.env.sample` file is provided in the project. Copy this file to `.env` and modify it according to your setup. The application will not function without this configuration.
 
 ### Swagger API Documentation
 
-After starting the application, navigate to [http://localhost:9000/api-docs](http://localhost:9000/api-docs) to access the Swagger API documentation. This provides an interactive UI to explore and test the API endpoints.
+After starting the application, navigate to [http://localhost:9000/api-docs](http://localhost:9000/api-docs) to access the Swagger API documentation.
 
 ### Database Seeding
 
