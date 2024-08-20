@@ -37,7 +37,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(3001);
 
   const rabbitMqApp = await NestFactory.createMicroservice<MicroserviceOptions>(
     BookServiceModule,

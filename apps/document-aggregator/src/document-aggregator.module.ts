@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { DocumentAggregatorController } from './document-aggregator.controller';
 import { DocumentAggregatorService } from './document-aggregator.service';
+import { HttpModule } from '@nestjs/axios';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
-  controllers: [DocumentAggregatorController],
+  imports: [
+    HttpModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
   providers: [DocumentAggregatorService],
 })
 export class DocumentAggregatorModule {}

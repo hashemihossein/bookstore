@@ -75,8 +75,18 @@ services:
       - .env
     networks:
       - traefik
-    depends_on:
-      - mongodb
+
+  document-aggregator:
+    container_name: document-aggregator
+    build:
+      context: .
+      args:
+        - APP=document-aggregator
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - traefik
 
   mongodb:
     container_name: mongodb

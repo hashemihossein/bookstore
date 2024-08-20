@@ -18,7 +18,7 @@ import { UserDecorator } from '@app/jwt/decorator/user.decorator';
 import { Admin } from '@app/rbac/admin.decorator';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('books')
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
