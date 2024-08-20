@@ -1,73 +1,77 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Bookstore
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a fully containerized bookstore application developed with a microservices architecture. It utilizes modern technologies like JWT for authentication, MongoDB as the database, RabbitMQ and HTTP for inter-service communication, and Memcached for caching. The system is orchestrated using Docker, with Traefik handling routing and load balancing. The API documentation is available via Swagger.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **Microservices Architecture**: Decoupled services for handling authentication, users, books, cart, etc.
+- **JWT Authentication**: Secure authentication and authorization.
+- **MongoDB**: NoSQL database for storing books, users, and order data.
+- **RabbitMQ & HTTP**: Robust communication between services.
+- **Memcached**: Efficient caching layer to improve performance.
+- **Traefik**: Dynamic routing and load balancing for microservices.
+- **Docker**: Fully containerized setup for easy deployment.
+- **Swagger**: API documentation available at `/api-docs`.
+- **Database Seeder**: Easy initialization of database collections via `/seeder` endpoint.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Architecture
+
+The system is built using a microservices architecture. Each service is independent and communicates with others via RabbitMQ and HTTP. The services are:
+
+- **Auth Service**: Handles user authentication with JWT.
+- **User Service**: Manages user information and roles.
+- **Book Service**: Handles book-related operations (CRUD).
+- **Cart Service**: Manages the user's shopping cart.
+
+A **Document Aggregator** is used to merge the Swagger documentation from all services, providing a unified API documentation accessible at `/api-docs`.
+
+Traefik is used as a reverse proxy and load balancer, managing the routing of requests to the appropriate services. The system also includes caching with Memcached to improve performance.
 
 ## Installation
 
-```bash
-$ npm install
-```
+1. **Clone the repository**:
 
-## Running the app
+   ```bash
+   git clone https://github.com/yourusername/bookstore-microservices.git
+   cd bookstore-microservices
+   ```
 
-```bash
-# development
-$ npm run start
+2. **Build and start the containers**:
 
-# watch mode
-$ npm run start:dev
+   ```bash
+   docker-compose up --build -d
+   ```
 
-# production mode
-$ npm run start:prod
-```
+3. **Verify the services are running**:
 
-## Test
+   ```bash
+   docker ps
+   ```
 
-```bash
-# unit tests
-$ npm run test
+## Configuration
 
-# e2e tests
-$ npm run test:e2e
+All configurations are managed via environment variables. You can find and modify these in the `.env` files located in each service's directory. Key configuration variables include:
 
-# test coverage
-$ npm run test:cov
-```
+- `JWT_SECRET`: Secret key for signing JWT tokens.
+- `MONGO_URI`: MongoDB connection string.
+- `RABBITMQ_URL`: URL for RabbitMQ.
+- `MEMCACHED_HOST`: Host for Memcached.
 
-## Support
+## Usage
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Swagger API Documentation
 
-## Stay in touch
+After starting the application, navigate to [http://localhost:9000/api-docs](http://localhost:9000/api-docs) to access the Swagger API documentation. This provides an interactive UI to explore and test the API endpoints.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Database Seeding
 
-## License
+To initialize the database with default data, you can use the seeder functionality:
 
-Nest is [MIT licensed](LICENSE).
+1. Access the seeder endpoint at [http://localhost:9000/seeder](http://localhost:9000/seeder).
+2. Send a `GET` request to initialize the database.
+
+## ERD
+
+Below is the Entity-Relationship Diagram (ERD) for the bookstore system:
+
+[ERD Diagram](https://drive.google.com/file/d/1GbpVd6QnuCqHAEkn3OFY5TqoCjsKFVQL/view?usp=drive_link)

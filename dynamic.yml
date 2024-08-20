@@ -30,6 +30,12 @@ http:
       entryPoints:
         - web
 
+    document-aggregator:
+      rule: 'PathPrefix(`/api-docs`)'
+      service: document-aggregator
+      entryPoints:
+        - web
+
   services:
     auth-service:
       loadBalancer:
@@ -55,3 +61,8 @@ http:
       loadBalancer:
         servers:
           - url: 'http://seeder:3000'
+
+    document-aggregator:
+      loadBalancer:
+        servers:
+          - url: 'http://document-aggregator:3000'
