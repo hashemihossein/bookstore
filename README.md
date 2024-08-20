@@ -63,6 +63,8 @@ Traefik is used as a reverse proxy and load balancer, managing the routing of re
 
 All configurations are managed via environment variables. A `.env.sample` file is provided in the project. Copy this file to `.env` and modify it according to your setup. The application will not function without this configuration.
 
+## Usage
+
 ### Swagger API Documentation
 
 After starting the application, navigate to [http://localhost:9000/api-docs](http://localhost:9000/api-docs) to access the Swagger API documentation.
