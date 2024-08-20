@@ -23,6 +23,7 @@ The system is built using a microservices architecture. Each service is independ
 - **Cart Service**: Manages the user's shopping cart.
 
 A **Database Seeder** for easy initialization of database collections via `GET` method at `/seeder` endpoint.
+
 A **Document Aggregator** is used to merge the Swagger documentation from all services, providing a unified API documentation accessible at `/api-docs`.
 
 Traefik is used as a reverse proxy and load balancer, managing the routing of requests to the appropriate services.
