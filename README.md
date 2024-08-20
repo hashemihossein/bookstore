@@ -33,7 +33,7 @@ Traefik is used as a reverse proxy and load balancer, managing the routing of re
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/bookstore.git
+   git clone https://github.com/hashemihossein/bookstore.git
    cd bookstore
    ```
 
