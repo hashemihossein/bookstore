@@ -50,7 +50,7 @@ Traefik is used as a reverse proxy and load balancer, managing the routing of re
 3. **Build and start the containers**:
 
    ```bash
-   docker-compose up --build -d
+   docker compose up --build -d
    ```
 
 4. **Verify the services are running**:
